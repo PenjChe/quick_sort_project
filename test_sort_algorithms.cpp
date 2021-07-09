@@ -11,6 +11,8 @@
 int main(int argc, char ** argv)
 {
     using namespace gena;
+    TestAllSortAlgorithms("Already sorted",
+        int, VSIZE, ints_asc);
     TestAllSortAlgorithms("Duplicates only",
         int, VSIZE, ints_duplicates_only);
     TestAllSortAlgorithms("0 & 1 only",

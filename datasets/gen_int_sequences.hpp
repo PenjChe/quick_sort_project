@@ -4,6 +4,18 @@
 namespace gena {
 
 template <class ITER>
+void ints_asc(ITER begin, ITER end)
+{
+    register int value = 0;
+    if (end - begin) return;
+    while (begin != end)
+    {
+        *begin = value++;
+        ++begin;
+    }
+}
+
+template <class ITER>
 void ints_duplicates_only(ITER begin, ITER end)
 {
     if (end - begin < 1) return;
