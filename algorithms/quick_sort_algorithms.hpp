@@ -43,7 +43,7 @@ template <class RAI>
 inline
 void quick_sort_cherepennikov(RAI begin, RAI end)
 {
-    sorting::_quick_sort_mine_new(begin, end,
+    sorting::_quick_sort_mine_new<RAI>::run(begin, end,
         std::less<typename std::iterator_traits<RAI>::value_type>());
 }
 
@@ -51,7 +51,7 @@ template <class RAI, class Comp>
 inline
 void quick_sort_cherepennikov(RAI begin, RAI end, Comp comp)
 {
-    sorting::_quick_sort_mine_new(begin, end, comp);
+    sorting::_quick_sort_mine_new<RAI>::run(begin, end, comp);
 }
 
 

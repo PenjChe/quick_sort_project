@@ -72,7 +72,7 @@ void _quick_sort_hoare_ins_new(RAI begin, RAI end, Comp comp)
         const Distance sz = end-begin;
         if (sz < static_cast<Distance>(QS2IS_THRESHOLD))
         {
-            sorting::_insertion_sort(begin, end, comp);
+            sorting::_insertion_sort<RAI>::run(begin, end, comp);
             return;
         }
 
@@ -146,7 +146,7 @@ void _quick_sort_hoare_ins_old(RAI begin, RAI end, Comp comp)
     const Distance sz = end-begin;
     if (sz < static_cast<Distance>(QS2IS_THRESHOLD))
     {
-        sorting::_insertion_sort(begin, end, comp);
+        sorting::_insertion_sort<RAI>::run(begin, end, comp);
         return;
     }
 

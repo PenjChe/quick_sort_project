@@ -5,36 +5,82 @@
 
 namespace sorting {
 
-// In this algorithm, insert operation is implemented by shifting method.
+#define RAI_VALUE_IS_SCALAR(type) \
+    (std::is_scalar< typename std::iterator_traits<type>::value_type >::value)
 
-template <class RAI, class Comp>
-void _insertion_sort(RAI begin, RAI end, Comp comp)
+// This is a common implementation that uses the swap function
+template <class RAI, bool = RAI_VALUE_IS_SCALAR(RAI) >
+struct _insertion_sort
 {
+
+  template <class Comp>
+  static void run(RAI begin, RAI end, Comp comp)
+  {
+    using std::swap;
     typedef typename std::iterator_traits<RAI>::value_type Value;
     if (end-begin < 2) return;
     RAI i = begin;
     while (++i != end)
     {
-        if (comp(*i, *begin))
+        RAI e = i, n = i-1;
+        if (comp(*e, *begin))
         {
-            Value z = *i;
-            RAI e = i;
-            do { *e = *(e-1); } while (begin != --e);
-            *begin = z;
+            do {
+                swap(*e, *n);
+                --e, --n;
+            } while (begin != e);
         }
-        else if (comp(*i, *(i-1)))
+        else
         {
-            Value z = *i;
-            RAI e = i, n = i-1;
+            while (comp(*e, *n))
+            {
+                swap(*e, *n);
+                --e, --n;
+            }
+        }
+    }
+  }
+}; // end of common implementation
+
+
+// This is a implementation for scalar types (int, float, double, etc...)
+// The insert operation is implemented by shifting method
+template <class RAI>
+struct _insertion_sort<RAI, true>
+{
+
+  template <class Comp>
+  static void run(RAI begin, RAI end, Comp comp)
+  {
+    typedef typename std::iterator_traits<RAI>::value_type Value;
+    if (end-begin < 2) return;
+    RAI i = begin;
+    while (++i != end)
+    {
+        RAI e = i, n = i-1;
+        const Value z = *e;
+        if (comp(z, *begin))
+        {
             do {
                 *e = *n;
-                e = n;
-            } while (comp(z, *--n));
+                --e, --n;
+            } while (begin != e);
+            *begin = z;
+        }
+        else
+        {
+            while (comp(z, *n))
+            {
+                *e = *n;
+                --e, --n;
+            }
             *e = z;
         }
     }
-}
+  }
+}; // end of specialization
 
+#undef RAI_VALUE_IS_SCALAR
 } // namespace
 
 #endif
