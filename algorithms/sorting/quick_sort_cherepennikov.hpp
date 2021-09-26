@@ -49,31 +49,27 @@ static void run(RAI begin, RAI end, Comp comp)
             if (br) break;
             ++b;
         }
-        RAI pivb = b, pive = ++b; // "Pivots" range
+        RAI pivb = b, pive = pivb+1; // "pivots" range
 
         // Stage 2. Move small values to the beginnig,
         // big values to the end, "pivots" are moving to found "brother".
         for(;;)
         {
-            while (comp(*b, *pivb)) ++b;  // skip small items
+            while (comp(*++b, *pivb));    // skip small items
             if (b == e) break;
-            bool fl = comp(*pivb, *b);
-            if (fl) {
+            if (comp(*pivb, *b)) {
                 while (comp(*pivb, *--e));  // skip big items
                 if (b == e+1) break;
-                fl = comp(*e, *pivb);
+                bool fl = comp(*e, *pivb);
                 swap(*b, *e);
+                if (fl) continue;
             }
-            if (!fl) {
-                // if current item is equal to pivot then move "pivots" to this one
-                for (RAI bbb = b; pive != bbb; ++pivb) {
-                    if (pivb == pive) {pivb = bbb; break;}
-                    swap(*pivb, *--bbb);
-                }
-                pive = b;
-                ++pive;
+            // if current item is equal to pivot then move "pivots" to this one
+            for (RAI bbb = b; pive != bbb; ++pivb) {
+                if (pivb == pive) {pivb = bbb; break;}
+                swap(*pivb, *--bbb);
             }
-            ++b;
+            pive = b+1;
         }
         // finally, put "pivots" into right place
         for (RAI bbb = b; pive != bbb; ++pivb) {
@@ -144,31 +140,27 @@ static void run(RAI begin, RAI end, Comp comp)
                 if (br) break;
                 ++b;
             }
-            pivb = b, pive = ++b; // "pivots" range
+            pivb = b, pive = pivb+1; // "pivots" range
 
             // Stage 2. Move small values to the beginnig,
             // big values to the end, "pivots" are moving to found "brother".
             for(;;)
             {
-                while (comp(*b, pivot)) ++b;  // skip small items
+                while (comp(*++b, pivot));    // skip small items
                 if (b == e) break;
-                bool fl = comp(pivot, *b);
-                if (fl) {
+                if (comp(pivot, *b)) {
                     while (comp(pivot, *--e));  // skip big items
                     if (b == e+1) break;
-                    fl = comp(*e, pivot);
+                    bool fl = comp(*e, pivot);
                     swap(*b, *e);
+                    if (fl) continue;
                 }
-                if (!fl) {
-                    // if current item is equal to pivot then move "pivots" to this one
-                    for (RAI bbb = b; pive != bbb; ++pivb) {
-                        if (pivb == pive) {pivb = bbb; break;}
-                        swap(*pivb, *--bbb);
-                    }
-                    pive = b;
-                    ++pive;
+                // if current item is equal to pivot then move "pivots" to this one
+                for (RAI bbb = b; pive != bbb; ++pivb) {
+                    if (pivb == pive) {pivb = bbb; break;}
+                    swap(*pivb, *--bbb);
                 }
-                ++b;
+                pive = b+1;
             }
             // finally, put "pivots" into right place
             for (RAI bbb = b; pive != bbb; ++pivb) {
