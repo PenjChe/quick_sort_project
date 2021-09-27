@@ -39,15 +39,13 @@ static void run(RAI begin, RAI end, Comp comp)
         if (sz == 3) return;
 
         // Stage 1. Find the pivot value while sorting.
-        for(;;)
+        // If predicate is false, that means *b == pivot
+        while (comp(*b, *pivb))
         {
-            while (comp(*b, *m)) ++b;
-            if (!comp(*m, *b)) break;
-            while (comp(*m, *e)) --e;
-            bool br = !comp(*e, *m);
+            while (comp(*++b, *pivb));
+            if (!comp(*pivb, *b)) break;
+            while (comp(*pivb, *e)) --e;
             swap(*b, *e);
-            if (br) break;
-            ++b;
         }
         RAI pivb = b, pive = pivb+1; // "pivots" range
 
@@ -60,9 +58,8 @@ static void run(RAI begin, RAI end, Comp comp)
             if (comp(*pivb, *b)) {
                 while (comp(*pivb, *--e));  // skip big items
                 if (b == e+1) break;
-                bool fl = comp(*e, *pivb);
                 swap(*b, *e);
-                if (fl) continue;
+                if (comp(*b, *pivb)) continue;
             }
             // if current item is equal to pivot then move "pivots" to this one
             for (RAI bbb = b; pive != bbb; ++pivb) {
@@ -130,15 +127,14 @@ static void run(RAI begin, RAI end, Comp comp)
         {
             // Stage 1. Find the pivot value while sorting.
             const Value pivot = *pivb; // !!! Store the pivot value
-            for(;;)
+
+            // If predicate is false, that means *b == pivot
+            while (comp(*b, pivot))
             {
-                while (comp(*b, pivot)) ++b;
+                while (comp(*++b, pivot));
                 if (!comp(pivot, *b)) break;
                 while (comp(pivot, *e)) --e;
-                bool br = !comp(*e, pivot);
                 swap(*b, *e);
-                if (br) break;
-                ++b;
             }
             pivb = b, pive = pivb+1; // "pivots" range
 
@@ -151,9 +147,8 @@ static void run(RAI begin, RAI end, Comp comp)
                 if (comp(pivot, *b)) {
                     while (comp(pivot, *--e));  // skip big items
                     if (b == e+1) break;
-                    bool fl = comp(*e, pivot);
                     swap(*b, *e);
-                    if (fl) continue;
+                    if (comp(*b, pivot)) continue;
                 }
                 // if current item is equal to pivot then move "pivots" to this one
                 for (RAI bbb = b; pive != bbb; ++pivb) {
