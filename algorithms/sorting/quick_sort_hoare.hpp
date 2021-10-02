@@ -3,6 +3,7 @@
 
 #include "insertion_sort.hpp"
 
+namespace algorithms {
 namespace sorting {
 
 
@@ -16,9 +17,10 @@ enum {
 // 2) Check middle item and move median to the center.
 // 3) After the cycle, recursive call for a smaller range,
 //    and recheck a larger range in-place.
+namespace version2 {
 
 template <typename RAI, class Comp>
-void _quick_sort_hoare_new(RAI begin, RAI end, Comp comp)
+void _quick_sort_hoare(RAI begin, RAI end, Comp comp)
 {
     using std::swap;
     typedef typename std::iterator_traits<RAI>::value_type Value;
@@ -50,19 +52,19 @@ void _quick_sort_hoare_new(RAI begin, RAI end, Comp comp)
         ++e;
         if (e - begin < end - b)       // (3)
         {
-            _quick_sort_hoare_new(begin, e, comp);
+            _quick_sort_hoare(begin, e, comp);
             begin = b;
         }
         else
         {
-            _quick_sort_hoare_new(b, end, comp);
+            _quick_sort_hoare(b, end, comp);
             end = e;
         }
     }
 }
 
 template <typename RAI, class Comp>
-void _quick_sort_hoare_ins_new(RAI begin, RAI end, Comp comp)
+void _quick_sort_hoare_ins(RAI begin, RAI end, Comp comp)
 {
     using std::swap;
     typedef typename std::iterator_traits<RAI>::value_type Value;
@@ -94,22 +96,25 @@ void _quick_sort_hoare_ins_new(RAI begin, RAI end, Comp comp)
         ++e;
         if (e - begin < end - b)
         {
-            _quick_sort_hoare_ins_new(begin, e, comp);
+            _quick_sort_hoare_ins(begin, e, comp);
             begin = b;
         }
         else
         {
-            _quick_sort_hoare_ins_new(b, end, comp);
+            _quick_sort_hoare_ins(b, end, comp);
             end = e;
         }
     }
 }
 
+} // namespace version2
 
 //-------------------------- unoptimized version ------------------------
 
+namespace version1 {
+
 template <class RAI, class Comp>
-void _quick_sort_hoare_old(RAI begin, RAI end, Comp comp)
+void _quick_sort_hoare(RAI begin, RAI end, Comp comp)
 {
     using std::swap;
     typedef typename std::iterator_traits<RAI>::value_type Value;
@@ -133,12 +138,12 @@ void _quick_sort_hoare_old(RAI begin, RAI end, Comp comp)
         } while(++b <= --e);
     }
 
-    _quick_sort_hoare_old(begin, e+1, comp);
-    _quick_sort_hoare_old(b, end, comp);
+    _quick_sort_hoare(begin, e+1, comp);
+    _quick_sort_hoare(b, end, comp);
 }
 
 template <class RAI, class Comp>
-void _quick_sort_hoare_ins_old(RAI begin, RAI end, Comp comp)
+void _quick_sort_hoare_ins(RAI begin, RAI end, Comp comp)
 {
     using std::swap;
     typedef typename std::iterator_traits<RAI>::value_type Value;
@@ -161,10 +166,13 @@ void _quick_sort_hoare_ins_old(RAI begin, RAI end, Comp comp)
         } while(++b <= --e);
     }
 
-    _quick_sort_hoare_ins_old(begin, e+1, comp);
-    _quick_sort_hoare_ins_old(b, end, comp);
+    _quick_sort_hoare_ins(begin, e+1, comp);
+    _quick_sort_hoare_ins(b, end, comp);
 }
 
-} // namespace
+} // namespace version1
+
+} // namespace sorting
+} // namespace algorithms
 
 #endif

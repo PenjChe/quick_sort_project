@@ -2,7 +2,9 @@
 #define INSERTION_SORT_HPP
 
 #include <iterator>
+#include <type_traits>
 
+namespace algorithms {
 namespace sorting {
 
 #define RAI_VALUE_IS_SCALAR(type) \
@@ -81,6 +83,7 @@ struct _insertion_sort<RAI, true>
 }; // end of specialization
 
 #undef RAI_VALUE_IS_SCALAR
-} // namespace
+} // namespace sorting
+} // namespace algorithms
 
 #endif

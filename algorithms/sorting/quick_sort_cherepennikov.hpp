@@ -4,6 +4,7 @@
 #include <iterator>
 #include <type_traits>
 
+namespace algorithms {
 namespace sorting {
 
 //NOTE: the default comparison operator is less than (<),
@@ -13,14 +14,16 @@ namespace sorting {
 #define RAI_VALUE_IS_SCALAR(type) \
     (std::is_scalar< typename std::iterator_traits<type>::value_type >::value)
 
+namespace version2 {
+
 // This is a common implementation
 template <class RAI, bool = RAI_VALUE_IS_SCALAR(RAI) >
-struct _quick_sort_mine_new
+struct _quick_sort_mine
 {
 
-template <class Comp>
-static void run(RAI begin, RAI end, Comp comp)
-{
+  template <class Comp>
+  static void run(RAI begin, RAI end, Comp comp)
+  {
     using std::swap;
     typedef typename std::iterator_traits<RAI>::difference_type Distance;
     for(;;)
@@ -40,11 +43,11 @@ static void run(RAI begin, RAI end, Comp comp)
 
         // Stage 1. Find the pivot value while sorting.
         // If predicate is false, that means *b == pivot
-        while (comp(*b, *pivb))
+        while (comp(*b, *m))
         {
-            while (comp(*++b, *pivb));
-            if (!comp(*pivb, *b)) break;
-            while (comp(*pivb, *e)) --e;
+            while (comp(*++b, *m));
+            if (!comp(*m, *b)) break;
+            while (comp(*m, *e)) --e;
             swap(*b, *e);
         }
         RAI pivb = b, pive = pivb+1; // "pivots" range
@@ -88,20 +91,19 @@ static void run(RAI begin, RAI end, Comp comp)
             end = pivb;
         }
     }
-}
-
+  }
 }; // end of common implementation
 
 
 // This is a implementation for scalar types (int, float, double, etc...)
 // It stores the pivot value in a local cell to accelerate the function
 template <class RAI>
-struct _quick_sort_mine_new<RAI, true>
+struct _quick_sort_mine<RAI, true>
 {
 
-template <class Comp>
-static void run(RAI begin, RAI end, Comp comp)
-{
+  template <class Comp>
+  static void run(RAI begin, RAI end, Comp comp)
+  {
     using std::swap;
     typedef typename std::iterator_traits<RAI>::difference_type Distance;
     typedef typename std::iterator_traits<RAI>::value_type Value;
@@ -178,14 +180,17 @@ static void run(RAI begin, RAI end, Comp comp)
             end = pivb;
         }
     }
-}
-
+  }
 }; // end of specialization
+
+} // namespace version2
 
 //------------------------------ first version --------------------------
 
+namespace version1 {
+
 template <class RAI, class Comp>
-void _quick_sort_mine_old(RAI begin, RAI end, Comp comp)
+void _quick_sort_mine(RAI begin, RAI end, Comp comp)
 {
     using std::swap;
     typedef typename std::iterator_traits<RAI>::difference_type Distance;
@@ -265,11 +270,14 @@ void _quick_sort_mine_old(RAI begin, RAI end, Comp comp)
     }
 
     // Stage 3
-    _quick_sort_mine_old(begin, pivb, comp);
-    _quick_sort_mine_old(pive, end, comp);
+    _quick_sort_mine(begin, pivb, comp);
+    _quick_sort_mine(pive, end, comp);
 }
 
+} // namespace version1
+
 #undef RAI_VALUE_IS_SCALAR
-} // namespace
+} // namespace sorting
+} // namespace algorithms
 
 #endif
