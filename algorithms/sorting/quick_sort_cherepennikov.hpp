@@ -57,26 +57,25 @@ struct _quick_sort_mine
         for(;;)
         {
             while (comp(*++b, *pivb));    // skip small items
-            if (b == e) break;
-            if (comp(*pivb, *b)) {
+            bool still_not_empty = (b != e);
+            if (still_not_empty && comp(*pivb, *b)) {
                 while (comp(*pivb, *--e));  // skip big items
-                if (b == e+1) break;
-                swap(*b, *e);
-                if (comp(*b, *pivb)) continue;
+                still_not_empty = (b != e+1);
+                if (still_not_empty) {
+                    swap(*b, *e);
+                    if (comp(*b, *pivb)) continue;
+                }
             }
-            // if current item is equal to pivot then move "pivots" to this one
+            // if current item is equal to pivot, then move "pivots" to this one
+            // or if all items are checked, then put "pivots" into right place
             for (RAI bbb = b; pive != bbb; ++pivb) {
                 if (pivb == pive) {pivb = bbb; break;}
                 swap(*pivb, *--bbb);
             }
-            pive = b+1;
+            pive = b;
+            if (!still_not_empty) break;
+            ++pive;
         }
-        // finally, put "pivots" into right place
-        for (RAI bbb = b; pive != bbb; ++pivb) {
-            if (pivb == pive) {pivb = bbb; break;}
-            swap(*pivb, *--bbb);
-        }
-        pive = b;
 
         // Stage 3. Sort a smaller range by recursive call.
         // Sort a larger range in-place.
@@ -145,26 +144,25 @@ struct _quick_sort_mine<RAI, true>
             for(;;)
             {
                 while (comp(*++b, pivot));    // skip small items
-                if (b == e) break;
-                if (comp(pivot, *b)) {
+                bool still_not_empty = (b != e);
+                if (still_not_empty && comp(pivot, *b)) {
                     while (comp(pivot, *--e));  // skip big items
-                    if (b == e+1) break;
-                    swap(*b, *e);
-                    if (comp(*b, pivot)) continue;
+                    still_not_empty = (b != e+1);
+                    if (still_not_empty) {
+                        swap(*b, *e);
+                        if (comp(*b, pivot)) continue;
+                    }
                 }
-                // if current item is equal to pivot then move "pivots" to this one
+                // if current item is equal to pivot, then move "pivots" to this one
+                // or if all items are checked, then put "pivots" into right place
                 for (RAI bbb = b; pive != bbb; ++pivb) {
                     if (pivb == pive) {pivb = bbb; break;}
                     swap(*pivb, *--bbb);
                 }
-                pive = b+1;
+                pive = b;
+                if (!still_not_empty) break;
+                ++pive;
             }
-            // finally, put "pivots" into right place
-            for (RAI bbb = b; pive != bbb; ++pivb) {
-                if (pivb == pive) {pivb = bbb; break;}
-                swap(*pivb, *--bbb);
-            }
-            pive = b;
         }
 
         // Stage 3. Sort a smaller range by recursive call.
