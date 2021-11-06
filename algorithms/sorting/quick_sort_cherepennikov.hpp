@@ -14,50 +14,57 @@ namespace sorting {
 #define RAI_VALUE_IS_SCALAR(type) \
     (std::is_scalar< typename std::iterator_traits<type>::value_type >::value)
 
+//-----------------------------------------------------------------------
+//----------------------------- second version --------------------------
+//-----------------------------------------------------------------------
+
 namespace version2 {
 
 // This is a common implementation
 template <class RAI, bool = RAI_VALUE_IS_SCALAR(RAI) >
 struct _quick_sort_mine
 {
-
   template <class Comp>
   static void run(RAI begin, RAI end, Comp comp)
   {
     using std::swap;
     typedef typename std::iterator_traits<RAI>::difference_type Distance;
+    RAI b,e,pivb,pive;
     for(;;)
     {
-        const Distance sz = end-begin;
-        if (sz < 2) return;
+        {
+            // Stage 0. Prepare.
+            const Distance sz = end-begin;
+            if (sz < 2) return;
 
-        // Stage 0. Prepare.
-        RAI b = begin, e = end;
-        if (comp(*--e, *b)) swap(*b, *e);
-        if (sz == 2) return;
+            b = begin, e = end - 1;
+            if (comp(*e, *b)) swap(*b, *e);
+            if (sz == 2) return;
 
-        RAI m = begin + sz/2;
-        if (comp(*m, *b)) swap(*b, *m);
-        if (comp(*e, *m)) swap(*m, *e);
-        if (sz == 3) return;
+            pivb = begin + (sz >> 1);
+            if (comp(*pivb, *b)) swap(*b, *pivb);
+            if (comp(*e, *pivb)) swap(*pivb, *e);
+            if (sz == 3) return;
+        }
 
         // Stage 1. Find the pivot value while sorting.
         // If predicate is false, that means *b == pivot
-        while (comp(*b, *m))
+        while (comp(*b, *pivb))
         {
-            while (comp(*++b, *m));
-            if (!comp(*m, *b)) break;
-            while (comp(*m, *e)) --e;
+            while (comp(*++b, *pivb));
+            if (!comp(*pivb, *b)) break;
+            while (comp(*pivb, *e)) --e;
             swap(*b, *e);
         }
-        RAI pivb = b, pive = pivb+1; // "pivots" range
+        pivb = b, pive = pivb+1; // "pivots" range
 
         // Stage 2. Move small values to the beginnig,
         // big values to the end, "pivots" are moving to found "brother".
-        for(;;)
+        bool still_not_empty = true;
+        do
         {
             while (comp(*++b, *pivb));    // skip small items
-            bool still_not_empty = (b != e);
+            still_not_empty = (b != e);
             if (still_not_empty && comp(*pivb, *b)) {
                 while (comp(*pivb, *--e));  // skip big items
                 still_not_empty = (b != e+1);
@@ -73,9 +80,8 @@ struct _quick_sort_mine
                 swap(*pivb, *--bbb);
             }
             pive = b;
-            if (!still_not_empty) break;
-            ++pive;
-        }
+            pive += still_not_empty;
+        } while (still_not_empty);
 
         // Stage 3. Sort a smaller range by recursive call.
         // Sort a larger range in-place.
@@ -99,7 +105,6 @@ struct _quick_sort_mine
 template <class RAI>
 struct _quick_sort_mine<RAI, true>
 {
-
   template <class Comp>
   static void run(RAI begin, RAI end, Comp comp)
   {
@@ -115,11 +120,11 @@ struct _quick_sort_mine<RAI, true>
             const Distance sz = end-begin;
             if (sz < 2) return;
 
-            b = begin, e = end;
-            if (comp(*--e, *b)) swap(*b, *e);
+            b = begin, e = end - 1;
+            if (comp(*e, *b)) swap(*b, *e);
             if (sz == 2) return;
 
-            pivb = begin + sz/2;
+            pivb = begin + (sz >> 1);
             if (comp(*pivb, *b)) swap(*b, *pivb);
             if (comp(*e, *pivb)) swap(*pivb, *e);
             if (sz == 3) return;
@@ -141,10 +146,11 @@ struct _quick_sort_mine<RAI, true>
 
             // Stage 2. Move small values to the beginnig,
             // big values to the end, "pivots" are moving to found "brother".
-            for(;;)
+            bool still_not_empty = true;
+            do
             {
                 while (comp(*++b, pivot));    // skip small items
-                bool still_not_empty = (b != e);
+                still_not_empty = (b != e);
                 if (still_not_empty && comp(pivot, *b)) {
                     while (comp(pivot, *--e));  // skip big items
                     still_not_empty = (b != e+1);
@@ -160,9 +166,8 @@ struct _quick_sort_mine<RAI, true>
                     swap(*pivb, *--bbb);
                 }
                 pive = b;
-                if (!still_not_empty) break;
-                ++pive;
-            }
+                pive += still_not_empty;
+            } while (still_not_empty);
         }
 
         // Stage 3. Sort a smaller range by recursive call.
@@ -183,7 +188,9 @@ struct _quick_sort_mine<RAI, true>
 
 } // namespace version2
 
+//-----------------------------------------------------------------------
 //------------------------------ first version --------------------------
+//-----------------------------------------------------------------------
 
 namespace version1 {
 

@@ -11,11 +11,13 @@ enum {
     QS2IS_THRESHOLD = 32
 };
 
+//-----------------------------------------------------------------------
 //--------------------------- optimized version -------------------------
+//-----------------------------------------------------------------------
 // Optimizations:
-// 1) Check two items - at the beginning and at the end.
-// 2) Check middle item and move median to the center.
-// 3) After the cycle, recursive call for a smaller range,
+// 1. Check two items - at the beginning and at the end.
+// 2. Check middle item and move median to the center.
+// 3. After the cycle, recursive call for a smaller range,
 //    and recheck a larger range in-place.
 namespace version2 {
 
@@ -34,17 +36,17 @@ void _quick_sort_hoare(RAI begin, RAI end, Comp comp)
         if (comp(*e, *b)) swap(*b, *e);
         if (sz == 2) return;           // (1)
 
-        RAI m = begin + sz/2;
+        RAI m = begin + (sz >> 1);
         if (comp(*m, *b)) swap(*b, *m);
         if (comp(*e, *m)) swap(*m, *e);
         if (sz == 3) return;           // (2)
 
         {
             const Value pivot = *m;
-            while (++b <= --e)
+            while (1)
             {
-                while (comp(*b, pivot)) ++b;
-                while (comp(pivot, *e)) --e;
+                while (comp(*++b, pivot)) b;
+                while (comp(pivot, *--e)) e;
                 if (!(b <= e)) break;
                 swap(*b, *e);
             }
@@ -78,17 +80,17 @@ void _quick_sort_hoare_ins(RAI begin, RAI end, Comp comp)
             return;
         }
 
-        RAI b = begin, e = end-1, m = begin + sz/2;
+        RAI b = begin, e = end-1, m = begin + (sz >> 1);
         if (comp(*e, *b)) swap(*b, *e);
         if (comp(*m, *b)) swap(*b, *m);
         if (comp(*e, *m)) swap(*m, *e);
 
         {
             const Value pivot = *m;
-            while (++b <= --e)
+            while (1)
             {
-                while (comp(*b, pivot)) ++b;
-                while (comp(pivot, *e)) --e;
+                while (comp(*++b, pivot)) b;
+                while (comp(pivot, *--e)) e;
                 if (!(b <= e)) break;
                 swap(*b, *e);
             }
@@ -109,7 +111,9 @@ void _quick_sort_hoare_ins(RAI begin, RAI end, Comp comp)
 
 } // namespace version2
 
+//-----------------------------------------------------------------------
 //-------------------------- unoptimized version ------------------------
+//-----------------------------------------------------------------------
 
 namespace version1 {
 
