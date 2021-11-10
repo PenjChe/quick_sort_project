@@ -14,8 +14,11 @@ struct SortAlgo
 {
     enum {
         SA_QUICKSORT_MY = 0,
+        SA_QUICKSORT_MY_V3,
         SA_QUICKSORT_HOARE,
+        SA_QUICKSORT_HOARE_V3,
         SA_QUICKSORT_HOARE_I,
+        SA_QUICKSORT_HOARE_I_V3,
         SA_STD_HEAPSORT,
         SA_STD_SORT,
         SA_STD_MERGESORT,
@@ -39,17 +42,38 @@ struct SortAlgo
             _c_finish = std::clock();
             ss << "quick sort Cherepennikov";
             break;
+        case SA_QUICKSORT_MY_V3:
+            _c_start = std::clock();
+            algorithms::sorting::version3::_quick_sort_mine<RAI>::run(begin, end,
+                std::less< typename std::iterator_traits<RAI>::value_type >());
+            _c_finish = std::clock();
+            ss << "quick sort Cherepennikov v3";
+            break;
         case SA_QUICKSORT_HOARE:
             _c_start = std::clock();
             algorithms::quick_sort_hoare(begin, end);
             _c_finish = std::clock();
             ss << "quick sort Hoare";
             break;
+        case SA_QUICKSORT_HOARE_V3:
+            _c_start = std::clock();
+            algorithms::sorting::version3::_quick_sort_hoare(begin, end,
+                std::less< typename std::iterator_traits<RAI>::value_type >());
+            _c_finish = std::clock();
+            ss << "quick sort Hoare v3";
+            break;
         case SA_QUICKSORT_HOARE_I:
             _c_start = std::clock();
             algorithms::quick_sort_hoare_ins(begin, end);
             _c_finish = std::clock();
             ss << "quick insert sort Hoare";
+            break;
+        case SA_QUICKSORT_HOARE_I_V3:
+            _c_start = std::clock();
+            algorithms::sorting::version3::_quick_sort_hoare_ins(begin, end,
+                std::less< typename std::iterator_traits<RAI>::value_type >());
+            _c_finish = std::clock();
+            ss << "quick insert sort Hoare v3";
             break;
         case SA_STD_HEAPSORT:
             _c_start = std::clock();
@@ -71,7 +95,7 @@ struct SortAlgo
             ss << "std stable sort";
             break;
         }
-        double worktime = static_cast<double>(_c_finish - _c_start) / CLOCKS_PER_SEC;
+        double worktime = static_cast<double>(_c_finish - _c_start) / (double)CLOCKS_PER_SEC;
         ss << ": "
            << (is_sorted_asc(begin, end) ? "   " : "NOT")
            << " sorted in " << worktime << " s";

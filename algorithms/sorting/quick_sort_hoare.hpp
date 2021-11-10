@@ -6,10 +6,142 @@
 namespace algorithms {
 namespace sorting {
 
+#define ORDER(a, b) if(comp(*(b), *(a))) swap(*(a), *(b))
+
 
 enum {
     QS2IS_THRESHOLD = 32
 };
+
+
+//-----------------------------------------------------------------------
+//---------------------------- super version ----------------------------
+//-----------------------------------------------------------------------
+
+namespace version3 {
+
+template <typename RAI, class Comp>
+void _quick_sort_hoare(RAI begin, RAI end, Comp comp)
+{
+    using std::swap;
+    typedef typename std::iterator_traits<RAI>::value_type Value;
+    typedef typename std::iterator_traits<RAI>::difference_type Distance;
+    RAI b, m, e;
+    for(;;)
+    {
+        {
+            const Distance sz = end-begin;
+            if (sz < 2) return;
+
+            b = begin, e = end - 1;
+            ORDER(b, e);
+            if (sz == 2) return;
+
+            m = begin + (sz >> 1);
+
+            RAI b025 = begin + (sz >> 2);
+            RAI b075 = b025 + (sz >> 1);
+
+            ORDER(b, b075);
+            ORDER(b025, e);
+            ORDER(b025, b075);
+
+            ORDER(b, m);
+            ORDER(m, e);
+            if (sz < 4) return;
+
+            ORDER(b, b025);
+            ORDER(b025, m);
+            ORDER(m, b075);
+            ORDER(b075, e);
+            if (sz < 6) return;
+        }
+
+        {
+            const Value pivot = *m;
+            while (1)
+            {
+                while (comp(*++b, pivot)) b;
+                while (comp(pivot, *--e)) e;
+                if (!(b <= e)) break;
+                swap(*b, *e);
+            }
+        }
+        ++e;
+        if (e - begin < end - b)
+        {
+            _quick_sort_hoare(begin, e, comp);
+            begin = b;
+        }
+        else
+        {
+            _quick_sort_hoare(b, end, comp);
+            end = e;
+        }
+    }
+}
+
+template <typename RAI, class Comp>
+void _quick_sort_hoare_ins(RAI begin, RAI end, Comp comp)
+{
+    using std::swap;
+    typedef typename std::iterator_traits<RAI>::value_type Value;
+    typedef typename std::iterator_traits<RAI>::difference_type Distance;
+    RAI b, m, e;
+    for(;;)
+    {
+        {
+            const Distance sz = end-begin;
+            if (sz < static_cast<Distance>(QS2IS_THRESHOLD))
+            {
+                sorting::_insertion_sort<RAI>::run(begin, end, comp);
+                return;
+            }
+
+            b = begin, e = end-1, m = begin + (sz >> 1);
+            ORDER(b, e);
+
+            RAI b025 = begin + (sz >> 2);
+            RAI b075 = b025 + (sz >> 1);
+
+            ORDER(b, b075);
+            ORDER(b025, e);
+            ORDER(b025, b075);
+            ORDER(b, m);
+            ORDER(m, e);
+
+            ORDER(b, b025);
+            ORDER(b025, m);
+            ORDER(m, b075);
+            ORDER(b075, e);
+        }
+
+        {
+            const Value pivot = *m;
+            while (1)
+            {
+                while (comp(*++b, pivot)) b;
+                while (comp(pivot, *--e)) e;
+                if (!(b <= e)) break;
+                swap(*b, *e);
+            }
+        }
+        ++e;
+        if (e - begin < end - b)
+        {
+            _quick_sort_hoare_ins(begin, e, comp);
+            begin = b;
+        }
+        else
+        {
+            _quick_sort_hoare_ins(b, end, comp);
+            end = e;
+        }
+    }
+}
+
+} // namespace version3
+
 
 //-----------------------------------------------------------------------
 //--------------------------- optimized version -------------------------
@@ -176,6 +308,7 @@ void _quick_sort_hoare_ins(RAI begin, RAI end, Comp comp)
 
 } // namespace version1
 
+#undef ORDER
 } // namespace sorting
 } // namespace algorithms
 
