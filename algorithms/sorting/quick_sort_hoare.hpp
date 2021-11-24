@@ -33,11 +33,11 @@ void _quick_sort_hoare(RAI begin, RAI end, Comp comp)
             const Distance sz = end-begin;
             if (sz < 2) return;
 
-            b = begin, e = end - 1;
+            b = begin, e = end, --e;
             ORDER(b, e);
             if (sz == 2) return;
 
-            m = begin + (sz >> 1);
+            m = begin, m += (sz >> 1);
 
             RAI b025 = begin + (sz >> 2);
             RAI b075 = b025 + (sz >> 1);
@@ -98,7 +98,7 @@ void _quick_sort_hoare_ins(RAI begin, RAI end, Comp comp)
                 return;
             }
 
-            b = begin, e = end-1, m = begin + (sz >> 1);
+            b = begin, e = end, --e, m = begin, m += (sz >> 1);
             ORDER(b, e);
 
             RAI b025 = begin + (sz >> 2);

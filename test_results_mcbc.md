@@ -1,5 +1,6 @@
-The testing were run on a virtual machine `MCBC` i586, 2 GB RAM.  
-Used `gcc-4.1.3`. Standard `C++03`. The test was compiled without optimization options.
+# Testing
+The testing were run on a virtual machine `MCBC` i586, 2 GB RAM.
+Used `gcc-4.1.3`. Standard `C++03`.
 
 Used abbreviations:
 + QS - QuickSort
@@ -27,8 +28,10 @@ A7  | Bitonic (ascending-mirrored)     | No
 A8  | R-Bitonic (descending-ascending) | Yes
 A9  | Bitonic (ascending-descending)   | Yes
 
+## Version 1
 **100000 integer values**
 
+Initially, the test was compiled **without** optimization options.
 The first test results in seconds:
 | N  | QS my | QS Hoare | QS + IS |  HS  |  SS  |  MS  |
 |:---|:-----:|:--------:|:-------:|:----:|:----:|:----:|
@@ -42,7 +45,10 @@ The first test results in seconds:
 | A8 | 56.45 |    0.35  |   0.35  | 0.10 | 0.09 | 0.02 |
 | A9 | 89.27 |    0.13  |   0.13  | 0.10 | 0.09 | 0.02 |
 
-After correction and optimization, *version 2*:
+It required correction and optimization.
+
+## Version 2
+
 | N  | QS my | QS Hoare | QS + IS |  HS  |  SS  |  MS  |
 |:---|:-----:|:--------:|:-------:|:----:|:----:|:----:|
 | A1 |  0.01 |   0.02   |   0.02  | 0.08 | 0.01 | 0.02 |
@@ -55,7 +61,7 @@ After correction and optimization, *version 2*:
 | A8 |  0.06 |   0.05   |   0.06  | 0.10 | 0.09 | 0.02 |
 | A9 |  0.06 |   0.05   |   0.06  | 0.10 | 0.09 | 0.02 |
 
-After that, I had increased the load... **1000000 integer values**:
+After that, I had increased the load... **1000000 (million) integer values**:
 | N  | QS my | QS Hoare | QS + IS |  HS  |  SS  |  MS  |
 |:---|:-----:|:--------:|:-------:|:----:|:----:|:----:|
 | A1 |  0.19 |   0.16   |   0.14  | 1.16 | 0.10 | 0.21 |
@@ -80,3 +86,33 @@ The same input data after the "scalar" optimization:
 | A7 |  0.69 |   0.67   |   0.67  | 1.17 | 1.09 | 0.27 |
 | A8 |  0.71 |   0.70   |   0.70  | 1.18 | 1.10 | 0.27 |
 | A9 |  0.71 |   0.70   |   0.70  | 1.17 | 1.11 | 0.27 |
+
+## Final modifications of version 2
+
+The tests was compiled without and **with** optimization options (`g++ -O3`):
+
+| N  |    QS my    |  QS Hoare  |   QS + IS  |     HS     |     SS     |     MS     |
+|:---|:-----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
+| A1 | 0.17; 0.01  | 0.16; 0.01 | 0.14; 0.01 | 1.16; 0.07 | 0.10; 0.01 | 0.21; 0.04 |
+| A2 | 0.03; <0.01 | 0.29; 0.01 | 0.24; 0.01 | 1.02; 0.07 | 0.30; 0.01 | 0.21; 0.04 |
+| A3 | 0.04; <0.01 | 0.30; 0.01 | 0.26; 0.01 | 1.06; 0.07 | 0.30; 0.01 | 0.29; 0.04 |
+| A4 | 0.17; 0.01  | 0.16; 0.01 | 0.14; 0.01 | 1.17; 0.09 | 0.11; 0.01 | 0.31; 0.13 |
+| A5 | 0.28; 0.02  | 0.28; 0.01 | 0.24; 0.01 | 1.14; 0.09 | 1.32; 0.09 | 0.22; 0.08 |
+| A6 | 0.69; 0.07  | 0.66; 0.05 | 0.66; 0.05 | 1.19; 0.09 | 1.10; 0.09 | 0.27; 0.08 |
+| A7 | 0.69; 0.07  | 0.65; 0.05 | 0.65; 0.05 | 1.17; 0.09 | 1.09; 0.08 | 0.27; 0.07 |
+| A8 | 0.70; 0.07  | 0.67; 0.06 | 0.67; 0.05 | 1.18; 0.09 | 1.10; 0.09 | 0.27; 0.08 |
+| A9 | 0.70; 0.07  | 0.67; 0.06 | 0.67; 0.06 | 1.17; 0.09 | 1.11; 0.08 | 0.27; 0.07 |
+
+After increasing the load (**10000000 (ten millions) integer values**), with optimization options:
+| N  | QS my | QS Hoare | QS + IS |  HS  |  SS  |  MS  |
+|:---|:-----:|:--------:|:-------:|:----:|:----:|:----:|
+| A1 |  0.14 |   0.13   |   0.09  | 0.74 | 0.13 | 0.39 |
+| A2 |  0.02 |   0.15   |   0.13  | 0.89 | 0.14 | 0.40 |
+| A3 |  0.03 |   0.15   |   0.13  | 0.90 | 0.15 | 0.47 |
+| A4 |  0.14 |   0.13   |   0.10  | 0.84 | 0.13 | 1.27 |
+| A5 |  0.23 |   0.21   |   0.17  | 0.79 | 1.11 | 0.40 |
+| A6 |  0.85 |   0.65   |   0.54  | 0.97 | 1.05 | 0.83 |
+| A7 |  0.82 |   0.64   |   0.54  | 0.88 | 0.99 | 0.84 |
+| A8 |  0.85 |   0.68   |   0.56  | 0.97 | 1.05 | 0.83 |
+| A9 |  0.82 |   0.68   |   0.56  | 0.88 | 1.00 | 0.84 |
+

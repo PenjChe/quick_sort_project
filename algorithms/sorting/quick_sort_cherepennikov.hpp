@@ -35,11 +35,11 @@ struct _quick_sort_mine
             const Distance sz = end-begin;
             if (sz < 2) return;
 
-            b = begin, e = end - 1;
+            b = begin, e = end, --e;
             ORDER(b, e);
             if (sz == 2) return;
 
-            pivb = begin + (sz >> 1);
+            pivb = begin, pivb += (sz >> 1);
 
             RAI b025 = begin + (sz >> 2);
             RAI b075 = b025 + (sz >> 1);
@@ -68,7 +68,7 @@ struct _quick_sort_mine
             while (comp(*pivb, *e)) --e;
             swap(*b, *e);
         }
-        pivb = b, pive = pivb+1; // "pivots" range
+        pivb = b, pive = pivb, ++pive; // "pivots" range
 
         // Stage 2. Move small values to the beginnig,
         // big values to the end, "pivots" are moving to found "brother".
@@ -87,11 +87,15 @@ struct _quick_sort_mine
             }
             // if current item is equal to pivot, then move "pivots" to this one
             // or if all items are checked, then put "pivots" into right place
-            for (RAI bbb = b; pive != bbb; ++pivb) {
-                if (pivb == pive) {pivb = bbb; break;}
-                swap(*pivb, *--bbb);
+            if (pive != b) {
+                RAI bbb = b;
+                do {
+                    if (pivb == pive) {pivb = bbb; break;}
+                    swap(*pivb, *--bbb);
+                    ++pivb;
+                } while (pive != bbb);
+                pive = b;
             }
-            pive = b;
             pive += still_not_empty;
         } while (still_not_empty);
 
@@ -132,11 +136,11 @@ struct _quick_sort_mine<RAI, true>
             const Distance sz = end-begin;
             if (sz < 2) return;
 
-            b = begin, e = end - 1;
+            b = begin, e = end, --e;
             ORDER(b, e);
             if (sz == 2) return;
 
-            pivb = begin + (sz >> 1);
+            pivb = begin, pivb += (sz >> 1);
 
             RAI b025 = begin + (sz >> 2);
             RAI b075 = b025 + (sz >> 1);
@@ -168,7 +172,7 @@ struct _quick_sort_mine<RAI, true>
                 while (comp(pivot, *e)) --e;
                 swap(*b, *e);
             }
-            pivb = b, pive = pivb+1; // "pivots" range
+            pivb = b, pive = pivb, ++pive; // "pivots" range
 
             // Stage 2. Move small values to the beginnig,
             // big values to the end, "pivots" are moving to found "brother".
@@ -187,11 +191,15 @@ struct _quick_sort_mine<RAI, true>
                 }
                 // if current item is equal to pivot, then move "pivots" to this one
                 // or if all items are checked, then put "pivots" into right place
-                for (RAI bbb = b; pive != bbb; ++pivb) {
-                    if (pivb == pive) {pivb = bbb; break;}
-                    swap(*pivb, *--bbb);
+                if (pive != b) {
+                    RAI bbb = b;
+                    do {
+                        if (pivb == pive) {pivb = bbb; break;}
+                        swap(*pivb, *--bbb);
+                        ++pivb;
+                    } while (pive != bbb);
+                    pive = b;
                 }
-                pive = b;
                 pive += still_not_empty;
             } while (still_not_empty);
         }
@@ -238,11 +246,11 @@ struct _quick_sort_mine
             const Distance sz = end-begin;
             if (sz < 2) return;
 
-            b = begin, e = end - 1;
+            b = begin, e = end, --e;
             ORDER(b, e);
             if (sz == 2) return;
 
-            pivb = begin + (sz >> 1);
+            pivb = begin, pivb += (sz >> 1);
             ORDER(b, pivb);
             ORDER(pivb, e);
             if (sz == 3) return;
@@ -257,7 +265,7 @@ struct _quick_sort_mine
             while (comp(*pivb, *e)) --e;
             swap(*b, *e);
         }
-        pivb = b, pive = pivb+1; // "pivots" range
+        pivb = b, pive = pivb, ++pive; // "pivots" range
 
         // Stage 2. Move small values to the beginnig,
         // big values to the end, "pivots" are moving to found "brother".
@@ -276,11 +284,15 @@ struct _quick_sort_mine
             }
             // if current item is equal to pivot, then move "pivots" to this one
             // or if all items are checked, then put "pivots" into right place
-            for (RAI bbb = b; pive != bbb; ++pivb) {
-                if (pivb == pive) {pivb = bbb; break;}
-                swap(*pivb, *--bbb);
+            if (pive != b) {
+                RAI bbb = b;
+                do {
+                    if (pivb == pive) {pivb = bbb; break;}
+                    swap(*pivb, *--bbb);
+                    ++pivb;
+                } while (pive != bbb);
+                pive = b;
             }
-            pive = b;
             pive += still_not_empty;
         } while (still_not_empty);
 
@@ -321,11 +333,11 @@ struct _quick_sort_mine<RAI, true>
             const Distance sz = end-begin;
             if (sz < 2) return;
 
-            b = begin, e = end - 1;
+            b = begin, e = end, --e;
             ORDER(b, e);
             if (sz == 2) return;
 
-            pivb = begin + (sz >> 1);
+            pivb = begin, pivb += (sz >> 1);
             ORDER(b, pivb);
             ORDER(pivb, e);
             if (sz == 3) return;
@@ -343,7 +355,7 @@ struct _quick_sort_mine<RAI, true>
                 while (comp(pivot, *e)) --e;
                 swap(*b, *e);
             }
-            pivb = b, pive = pivb+1; // "pivots" range
+            pivb = b, pive = pivb, ++pive; // "pivots" range
 
             // Stage 2. Move small values to the beginnig,
             // big values to the end, "pivots" are moving to found "brother".
@@ -362,11 +374,15 @@ struct _quick_sort_mine<RAI, true>
                 }
                 // if current item is equal to pivot, then move "pivots" to this one
                 // or if all items are checked, then put "pivots" into right place
-                for (RAI bbb = b; pive != bbb; ++pivb) {
-                    if (pivb == pive) {pivb = bbb; break;}
-                    swap(*pivb, *--bbb);
+                if (pive != b) {
+                    RAI bbb = b;
+                    do {
+                        if (pivb == pive) {pivb = bbb; break;}
+                        swap(*pivb, *--bbb);
+                        ++pivb;
+                    } while (pive != bbb);
+                    pive = b;
                 }
-                pive = b;
                 pive += still_not_empty;
             } while (still_not_empty);
         }
