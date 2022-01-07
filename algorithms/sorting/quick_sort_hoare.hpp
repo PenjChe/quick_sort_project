@@ -61,8 +61,8 @@ void _quick_sort_hoare(RAI begin, RAI end, Comp comp)
             const Value pivot = *m;
             while (1)
             {
-                while (comp(*++b, pivot)) b;
-                while (comp(pivot, *--e)) e;
+                while (comp(*++b, pivot));
+                while (comp(pivot, *--e));
                 if (!(b <= e)) break;
                 swap(*b, *e);
             }
@@ -120,8 +120,8 @@ void _quick_sort_hoare_ins(RAI begin, RAI end, Comp comp)
             const Value pivot = *m;
             while (1)
             {
-                while (comp(*++b, pivot)) b;
-                while (comp(pivot, *--e)) e;
+                while (comp(*++b, pivot));
+                while (comp(pivot, *--e));
                 if (!(b <= e)) break;
                 swap(*b, *e);
             }
@@ -177,8 +177,8 @@ void _quick_sort_hoare(RAI begin, RAI end, Comp comp)
             const Value pivot = *m;
             while (1)
             {
-                while (comp(*++b, pivot)) b;
-                while (comp(pivot, *--e)) e;
+                while (comp(*++b, pivot));
+                while (comp(pivot, *--e));
                 if (!(b <= e)) break;
                 swap(*b, *e);
             }
@@ -221,8 +221,8 @@ void _quick_sort_hoare_ins(RAI begin, RAI end, Comp comp)
             const Value pivot = *m;
             while (1)
             {
-                while (comp(*++b, pivot)) b;
-                while (comp(pivot, *--e)) e;
+                while (comp(*++b, pivot));
+                while (comp(pivot, *--e));
                 if (!(b <= e)) break;
                 swap(*b, *e);
             }

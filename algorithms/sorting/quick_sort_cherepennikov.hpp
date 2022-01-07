@@ -60,13 +60,16 @@ struct _quick_sort_mine
         }
 
         // Stage 1. Find the pivot value while sorting.
-        // If predicate is false, that means *b == pivot
-        while (comp(*b, *pivb))
         {
-            while (comp(*++b, *pivb));
+          bool not_found_pivot = true;
+          do
+          {
+            while (comp(*b, *pivb)) ++b;
             if (!comp(*pivb, *b)) break;
             while (comp(*pivb, *e)) --e;
+            not_found_pivot = comp(*e, *pivb);
             swap(*b, *e);
+          } while(not_found_pivot);
         }
         pivb = b, pive = pivb, ++pive; // "pivots" range
 
@@ -257,13 +260,16 @@ struct _quick_sort_mine
         }
 
         // Stage 1. Find the pivot value while sorting.
-        // If predicate is false, that means *b == pivot
-        while (comp(*b, *pivb))
         {
-            while (comp(*++b, *pivb));
+          bool not_found_pivot = true;
+          do
+          {
+            while (comp(*b, *pivb)) ++b;
             if (!comp(*pivb, *b)) break;
             while (comp(*pivb, *e)) --e;
+            not_found_pivot = comp(*e, *pivb);
             swap(*b, *e);
+          } while(not_found_pivot);
         }
         pivb = b, pive = pivb, ++pive; // "pivots" range
 
