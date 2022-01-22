@@ -69,6 +69,7 @@ struct _quick_sort_mine
             while (comp(*pivb, *e)) --e;
             not_found_pivot = comp(*e, *pivb);
             swap(*b, *e);
+            b += not_found_pivot;
           } while(not_found_pivot);
         }
         pivb = b, pive = pivb, ++pive; // "pivots" range
@@ -269,6 +270,7 @@ struct _quick_sort_mine
             while (comp(*pivb, *e)) --e;
             not_found_pivot = comp(*e, *pivb);
             swap(*b, *e);
+            b += not_found_pivot;
           } while(not_found_pivot);
         }
         pivb = b, pive = pivb, ++pive; // "pivots" range

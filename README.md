@@ -16,6 +16,8 @@ The test results of the latest versions have been impressive. My algorithm is no
 
 But that is not all. I optimized my algorithm's final version for working with *scalar* types (integer, floating). By storing the pivot value into a local variable, my algorithm's duration had approached to Hoare's. So I had divided my algorithm's behavior into work with scalar and non-scalar data.
 
+The test results of the non-scalar variants: in most cases, my algorithm loses to `std::sort`.
+
 ## Testing
 
 [The test results, MCBC, gcc 4.1.3](test_results_mcbc.md)
