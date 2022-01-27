@@ -20,4 +20,6 @@ The test results of the non-scalar variants: in most cases, my algorithm loses t
 
 ## Testing
 
-[The test results, MCBC, gcc 4.1.3](test_results_mcbc.md)
+The test results, MCBC, gcc 4.1.3.
+- [array of scalar type](test_results_mcbc.md)
+- [array of 2D-points](test_results_mcbc2.md)
