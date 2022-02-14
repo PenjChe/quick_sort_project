@@ -69,6 +69,7 @@ struct _quick_sort_mine
             while (comp(*pivb, *e)) --e;
             not_found_pivot = comp(*e, *pivb);
             swap(*b, *e);
+            --e;
             b += not_found_pivot;
           } while(not_found_pivot);
         }
@@ -82,10 +83,11 @@ struct _quick_sort_mine
             while (comp(*++b, *pivb));    // skip small items
             still_not_empty = (b != e);
             if (still_not_empty && comp(*pivb, *b)) {
-                while (comp(*pivb, *--e));  // skip big items
+                while (comp(*pivb, *e)) --e;  // skip big items
                 still_not_empty = (b != e+1);
                 if (still_not_empty) {
                     swap(*b, *e);
+                    --e;
                     if (comp(*b, *pivb)) continue;
                 }
             }
@@ -175,6 +177,7 @@ struct _quick_sort_mine<RAI, true>
                 if (!comp(pivot, *b)) break;
                 while (comp(pivot, *e)) --e;
                 swap(*b, *e);
+                --e;
             }
             pivb = b, pive = pivb, ++pive; // "pivots" range
 
@@ -186,10 +189,11 @@ struct _quick_sort_mine<RAI, true>
                 while (comp(*++b, pivot));    // skip small items
                 still_not_empty = (b != e);
                 if (still_not_empty && comp(pivot, *b)) {
-                    while (comp(pivot, *--e));  // skip big items
+                    while (comp(pivot, *e)) --e;  // skip big items
                     still_not_empty = (b != e+1);
                     if (still_not_empty) {
                         swap(*b, *e);
+                        --e;
                         if (comp(*b, pivot)) continue;
                     }
                 }
@@ -270,6 +274,7 @@ struct _quick_sort_mine
             while (comp(*pivb, *e)) --e;
             not_found_pivot = comp(*e, *pivb);
             swap(*b, *e);
+            --e;
             b += not_found_pivot;
           } while(not_found_pivot);
         }
@@ -283,10 +288,11 @@ struct _quick_sort_mine
             while (comp(*++b, *pivb));    // skip small items
             still_not_empty = (b != e);
             if (still_not_empty && comp(*pivb, *b)) {
-                while (comp(*pivb, *--e));  // skip big items
+                while (comp(*pivb, *e)) --e;  // skip big items
                 still_not_empty = (b != e+1);
                 if (still_not_empty) {
                     swap(*b, *e);
+                    --e;
                     if (comp(*b, *pivb)) continue;
                 }
             }
@@ -362,6 +368,7 @@ struct _quick_sort_mine<RAI, true>
                 if (!comp(pivot, *b)) break;
                 while (comp(pivot, *e)) --e;
                 swap(*b, *e);
+                --e;
             }
             pivb = b, pive = pivb, ++pive; // "pivots" range
 
@@ -373,10 +380,11 @@ struct _quick_sort_mine<RAI, true>
                 while (comp(*++b, pivot));    // skip small items
                 still_not_empty = (b != e);
                 if (still_not_empty && comp(pivot, *b)) {
-                    while (comp(pivot, *--e));  // skip big items
+                    while (comp(pivot, *e)) --e;  // skip big items
                     still_not_empty = (b != e+1);
                     if (still_not_empty) {
                         swap(*b, *e);
+                        --e;
                         if (comp(*b, pivot)) continue;
                     }
                 }
